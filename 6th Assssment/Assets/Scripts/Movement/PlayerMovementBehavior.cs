@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MovementBehaviour : MonoBehaviour
+public class PlayerMovementBehavior : MonoBehaviour
 {
     [Tooltip("How fast the player will move.")]
     [SerializeField]
