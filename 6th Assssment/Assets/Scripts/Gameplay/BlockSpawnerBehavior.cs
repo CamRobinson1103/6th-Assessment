@@ -22,12 +22,12 @@ public class BlockSpawnerBehavior : MonoBehaviour
 
     public IEnumerator SpawnBlock()
     {
-        float randY = 0;
+        float randX = 0;
         while (!GameOver)
         {
             //Find a random spawn position for the pipe
-            randY = Random.Range(yMin, yMax);
-            Vector3 spawnPosition = new Vector3(transform.position.x, randY, transform.position.z);
+            randX = Random.Range(yMin, yMax);
+            Vector3 spawnPosition = new Vector3(transform.position.x, randX, transform.position.z);
 
             //Spawn in an instance of the pipe prefab at the given position with a default rotation
             GameObject PIPE = Instantiate(BlockRef, spawnPosition, new Quaternion());
