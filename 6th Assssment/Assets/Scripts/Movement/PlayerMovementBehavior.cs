@@ -4,50 +4,51 @@ using UnityEngine;
 
 public class PlayerMovementBehavior : MonoBehaviour
 {
-    [Tooltip("How fast the player will move.")]
-    [SerializeField]
-    private float _moveSpeed;
-    [Tooltip("The current active camera. Used to get mouse position for rotation.")]
-    [SerializeField]
-    private Camera _camera;
-    private Rigidbody _rigidbody;
 
-    // Start is called before the first frame update
+    public float speed = 10f;
+    public Vector3 targetPos;
+    public bool isMoving;
+    const int MOUSE = 0;
+    // Use this for initialization1
     void Start()
     {
-        //Store reference to the attached rigidbody
-        _rigidbody = GetComponent<Rigidbody>();
+
+        targetPos = transform.position;
+        isMoving = false;
     }
 
-    public void ResetPlayerPosition()
+    // Update is called once per frame
+    void Update()
     {
-        transform.position = new Vector3(0, transform.localScale.y / 2, 0);
-    }
 
-    private void FixedUpdate()
-    {
-        //The direction the player is moving in is set to the input values for the horizontal and vertical axis
-        Vector3 moveDir = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        //The move direction is scaled by the movement speed to get velocity
-        Vector3 velocity = moveDir * _moveSpeed * Time.deltaTime;
-
-        //Call to make the rigidbody smoothly move to the desired position
-        _rigidbody.MovePosition(transform.position + velocity);
-
-        //Create a ray that starts at a screen point
-        RaycastHit hit;
-        Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
-
-        //Checks to see if the ray hits any object in the world
-        if (Physics.Raycast(ray, out hit))
+        if (Input.GetMouseButton(MOUSE))
         {
-            //Find the direction the player should look towards
-            Vector3 lookDir = new Vector3(hit.point.x, transform.position.y, hit.point.z) - transform.position;
-            //Create a rotation from the player's forward to the look direction
-            Quaternion rotation = Quaternion.LookRotation(lookDir);
-            //Set the rotation to be the new rotation found
-            _rigidbody.MoveRotation(rotation);
+            SetTarggetPosition();
         }
+        if (isMoving)
+        {
+            MoveObject();
+        }
+    }
+    void SetTarggetPosition()
+    {
+        Plane plane = new Plane(Vector3.up, transform.position);
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        float point = 0f;
+
+        if (plane.Raycast(ray, out point))
+            targetPos = ray.GetPoint(point);
+
+        isMoving = true;
+    }
+    void MoveObject()
+    {
+        transform.LookAt(targetPos);
+        transform.position = Vector3.MoveTowards(transform.position, targetPos, speed * Time.deltaTime);
+
+        if (transform.position == targetPos)
+            isMoving = false;
+        Debug.DrawLine(transform.position, targetPos, Color.red);
     }
 }
 
