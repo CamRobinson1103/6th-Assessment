@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class PlayerBehavior: MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
@@ -16,12 +16,13 @@ public class Player : MonoBehaviour
         
     }
 
-    void OnCollisionEnter(Collision collision
-        )
+    void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Cube")
         {
             Destroy(gameObject);
+            FindObjectOfType<GameManagerBehavior>().EndGame();
+
         }
     }
 }

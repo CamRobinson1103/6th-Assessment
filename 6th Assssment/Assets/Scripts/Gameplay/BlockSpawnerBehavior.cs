@@ -5,9 +5,9 @@ using UnityEngine;
 public class BlockSpawnerBehavior : MonoBehaviour
 {
     //The lowest y position allowed
-    public float yMin;
+    public float xMin;
     //The highest y position allowed
-    public float yMax;
+    public float xMax;
     //Time between pipe spawn
     public float TimeInterval;
     public bool GameOver = false;
@@ -26,12 +26,12 @@ public class BlockSpawnerBehavior : MonoBehaviour
         while (!GameOver)
         {
             //Find a random spawn position for the pipe
-            randX = Random.Range(yMin, yMax);
-            Vector3 spawnPosition = new Vector3(transform.position.x, randX, transform.position.z);
+            randX = Random.Range(xMin, xMax);
+            Vector3 spawnPosition = new Vector3( randX, transform.position.y, transform.position.z);
 
             //Spawn in an instance of the pipe prefab at the given position with a default rotation
-            GameObject PIPE = Instantiate(BlockRef, spawnPosition, new Quaternion());
-            BlockMovementBehavior moveScript = PIPE.GetComponent<BlockMovementBehavior>();
+            GameObject Cube = Instantiate(BlockRef, spawnPosition, new Quaternion());
+            BlockMovementBehavior moveScript = Cube.GetComponent<BlockMovementBehavior>();
             moveScript.StartCos = Random.Range(-1, 1);
 
             //Wait for the given time interval before resuming the function

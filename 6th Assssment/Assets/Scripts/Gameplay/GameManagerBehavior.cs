@@ -5,32 +5,23 @@ using UnityEngine.SceneManagement;
 
 public class GameManagerBehavior : MonoBehaviour
 {
-    [SerializeField]
-    private static bool _gameOver = false;
-    [SerializeField]
-    private GameObject _gameOverScreen;
+	bool gameHasEnded = false;
 
-    public static bool GameOver
-    {
-        get
-        {
-            return _gameOver;
-        }
-    }
+	public float restartDelay = 1f;
 
-    public void RestartGame()
-    {
-        SceneManager.LoadScene(0);
-    }
 
-    public void QuitGame()
-    {
-        Application.Quit();
-    }
+	public void EndGame()
+	{
+		if (gameHasEnded == false)
+		{
+			gameHasEnded = true;
+			Debug.Log("GAME OVER");
+			Invoke("Restart", restartDelay);
+		}
+	}
 
-    // Update is called once per frame
-    void Update()
-    {
-        _gameOverScreen.SetActive(_gameOver);
-    }
+	void Restart()
+	{
+		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+	}
 }
