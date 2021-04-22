@@ -4,52 +4,25 @@ using UnityEngine;
 
 public class PlayerMovementBehavior : MonoBehaviour
 {
+    public Rigidbody rb;
 
-    public float speed = 10f;
-    public Vector3 targetPos;
-    public bool isMoving;
-    const int MOUSE = 0;
-    // Use this for initialization1
-    void Start()
-    {
+	public float forwardForce = 2000f;  // Variable that determines the forward force
+	public float sidewaysForce = 500f;  // Variable that determines the sideways force
 
-        targetPos = transform.position;
-        isMoving = false;
-    }
+	void FixedUpdate()
+	{
+		rb.AddForce(0, 0, 2000 * Time.deltaTime);   // Add a force of 2000 on the z-axis
 
-    // Update is called once per frame
-    void Update()
-    {
+		if(Input.GetMouseButton(0))
+		{
+			rb.AddForce(-sidewaysForce * Time.deltaTime, 0, 0);
+		}
 
-        if (Input.GetMouseButton(MOUSE))
-        {
-            SetTarggetPosition();
-        }
-        if (isMoving)
-        {
-            MoveObject();
-        }
-    }
-    void SetTarggetPosition()
-    {
-        Plane plane = new Plane(Vector3.up, transform.position);
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        float point = 0f;
-
-        if (plane.Raycast(ray, out point))
-            targetPos = ray.GetPoint(point);
-
-        isMoving = true;
-    }
-    void MoveObject()
-    {
-        transform.LookAt(targetPos);
-        transform.position = Vector3.MoveTowards(transform.position, targetPos, speed * Time.deltaTime);
-
-        if (transform.position == targetPos)
-            isMoving = false;
-        Debug.DrawLine(transform.position, targetPos, Color.red);
-    }
+		if (Input.GetMouseButton(1))
+		{
+			rb.AddForce(sidewaysForce * Time.deltaTime, 0, 0);
+		}
+	}
 }
 
 
